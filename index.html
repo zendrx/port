@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zendrx — Systems & Backend</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html">zendrx<span>_</span></a>
+    <ul>
+      <li><a class="navlink active" href="index.html">home</a></li>
+      <li><a class="navlink" href="projects.html">projects</a></li>
+      <li><a class="navlink" href="blog.html">blog</a></li>
+    </ul>
+  </nav>
+
+  <main class="wrap hero">
+    <div class="status"><span class="dot"></span> available — building in Zig & Crystal</div>
+
+    <h1>Hey, I'm <span class="accent">Zendrx</span>.<br>I build systems that don't flinch.</h1>
+
+    <p class="lead">
+      Backend &amp; systems developer. I write low-level, performance-first tools
+      in Zig and Crystal — LLM runtimes, agentic frameworks, and library ports —
+      and I write about how they're built.
+    </p>
+
+    <div class="stack">
+      <span class="chip">zig</span>
+      <span class="chip">crystal</span>
+      <span class="chip">backend</span>
+      <span class="chip">systems</span>
+      <span class="chip">llm tooling</span>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar"><i></i><i></i><i></i></div>
+      <div class="terminal-body" id="term"></div>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn-primary" href="projects.html">view projects →</a>
+      <a class="btn btn-ghost" href="blog.html">read the blog</a>
+      <a class="btn btn-ghost" href="https://github.com/zendrx" target="_blank" rel="noopener">github ↗</a>
+    </div>
+  </main>
+
+  <footer>
+    built by <a href="https://github.com/zendrx">zendrx</a> — no backend, just static files &amp; the GitHub API
+  </footer>
+
+  <script>
+    /* typewriter terminal animation */
+    const lines = [
+      { cmd: "whoami", out: "zendrx — systems & backend developer" },
+      { cmd: "cat stack.txt", out: "zig  crystal  linux  low-level everything" },
+      { cmd: "./current_project --status", out: "<span class='ok'>[OK]</span> shipping." },
+    ];
+    const term = document.getElementById("term");
+    let li = 0;
+
+    function typeLine() {
+      if (li >= lines.length) {
+        term.insertAdjacentHTML("beforeend", `<div class="cmd"><span class="cursor"></span></div>`);
+        return;
+      }
+      const { cmd, out } = lines[li];
+      const div = document.createElement("div");
+      div.className = "cmd";
+      term.appendChild(div);
+      let i = 0;
+      const t = setInterval(() => {
+        div.textContent = cmd.slice(0, ++i);
+        if (i >= cmd.length) {
+          clearInterval(t);
+          setTimeout(() => {
+            div.innerHTML = `<span class="cmd">${cmd}</span>`;
+            term.insertAdjacentHTML("beforeend", `<div class="out">${out}</div>`);
+            li++;
+            setTimeout(typeLine, 350);
+          }, 250);
+        }
+      }, 40);
+    }
+    typeLine();
+  </script>
+</body>
+</html>

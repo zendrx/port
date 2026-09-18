@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post — Zendrx</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html">zendrx<span>_</span></a>
+    <ul>
+      <li><a class="navlink" href="index.html">home</a></li>
+      <li><a class="navlink" href="projects.html">projects</a></li>
+      <li><a class="navlink active" href="blog.html">blog</a></li>
+    </ul>
+  </nav>
+
+  <main class="wrap">
+    <a class="article-back" href="blog.html">← back to blog</a>
+    <article class="article" id="article">
+      <div class="loading">loading post</div>
+    </article>
+  </main>
+
+  <footer>
+    built by <a href="https://github.com/zendrx">zendrx</a> — no backend, just static files &amp; the GitHub API
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    (async () => {
+      const name = param(""); // read.html?<name>
+      const el = document.getElementById("article");
+      document.title = `${name} — Zendrx`;
+      try {
+        const md = await fetchRaw(`blog/${name}.md`);
+        el.innerHTML = renderMD(md);
+        if (window.hljs) hljs.highlightAll();
+      } catch (e) {
+        el.innerHTML = `<p class="error-msg">couldn't load "${name}" — ${e.message}</p>`;
+      }
+    })();
+  </script>
+</body>
+</html>

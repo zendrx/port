@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Zendrx</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <a class="logo" href="index.html">zendrx<span>_</span></a>
+    <ul>
+      <li><a class="navlink" href="index.html">home</a></li>
+      <li><a class="navlink active" href="projects.html">projects</a></li>
+      <li><a class="navlink" href="blog.html">blog</a></li>
+    </ul>
+  </nav>
+
+  <main class="wrap">
+    <div class="page-head">
+      <h1>projects</h1>
+      <p>Things I've built — each with a writeup on how it works under the hood.</p>
+    </div>
+    <div class="card-list" id="list">
+      <div class="loading">fetching projects</div>
+    </div>
+  </main>
+
+  <footer>
+    built by <a href="https://github.com/zendrx">zendrx</a> — no backend, just static files &amp; the GitHub API
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    (async () => {
+      const list = document.getElementById("list");
+      try {
+        const files = await listMD("projects");
+        if (!files.length) {
+          list.innerHTML = `<p class="error-msg">no .md files found in /projects yet</p>`;
+          return;
+        }
+        list.innerHTML = "";
+        for (const f of files) {
+          const name = f.name.replace(/\.md$/, "");
+          let snippet = "";
+          try {
+            const md = await fetchRaw(`projects/${f.name}`);
+            snippet = makeSnippet(md);
+          } catch (_) {}
+          list.insertAdjacentHTML("beforeend", `
+            <a class="card" href="show.html?${encodeURIComponent(name)}">
+              <h2>${name} <span class="arrow">→</span></h2>
+              <div class="meta">projects/${f.name}</div>
+              <p class="desc">${snippet}</p>
+            </a>`);
+        }
+      } catch (e) {
+        list.innerHTML = `<p class="error-msg">${e.message}</p>`;
+      }
+    })();
+  </script>
+</body>
+</html>
